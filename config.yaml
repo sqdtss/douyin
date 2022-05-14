@@ -1,0 +1,28 @@
+# 启动端口号
+server:
+  protocol: http
+  port: 8080
+
+# MySQL数据源配置
+mysql:
+  username: root
+  password: 123456
+  url: tcp(localhost:3306)/douyin?charset=utf8&parseTime=True&loc=Local
+  maxIdleConns: 10
+  maxOpenConns: 100
+  connMaxLifetime: 1440
+
+# Redis配置
+redis:
+  addr: localhost:6379
+  password: 123456
+  db: 0
+
+# 图片路径配置
+upload:
+  savePath: /Users/ts/workspace/GoWorkSpace/douyin/public/
+  accessUrl: http://localhost:8080/public/
+
+# JWT配置
+jwt:
+  signingKey: z3d6k8v0n3w7m9sa1fd0u09h
