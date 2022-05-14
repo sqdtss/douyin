@@ -1,6 +1,9 @@
 ## 第三届字节青训营后端专场项目，前端为字节提供精简版抖音app，后端基于简单的Gin、Gorm及Mysql实现，后面可能会再对方方面面进行优化
 
 ## 安装
+```shell
+git clone https://github.com/sqdtss/douyin.git
+```
 #### 手机客户端
 将apk文件夹下的apk下载到安卓手机/模拟器中下载，快速双击我的即可配置服务器地址，如http://192.168.3.1:8080/
 
@@ -11,7 +14,7 @@
 
 最后运行以下代码即可运行。
 ```shell
-git clone https://github.com/sqdtss/douyin.git
+cd douyin
 go generate
 go build
 ./douyin
