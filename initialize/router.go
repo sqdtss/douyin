@@ -3,6 +3,7 @@ package initialize
 import (
 	"douyin/api"
 	"douyin/global"
+	"douyin/middleware"
 	"fmt"
 	"github.com/gin-gonic/gin"
 )
@@ -20,9 +21,14 @@ func Router() {
 		// feed api
 		douyin.GET("/feed/", api.Feed)
 
-		// user注册/登录/获取用户信息api
+		// user注册/登录api
 		douyin.POST("/user/register/", api.Register)
 		douyin.POST("/user/login/", api.Login)
+
+		// 以下使用Jwt鉴权
+		douyin.Use(middleware.JwtAuth())
+
+		/// 获取用户信息api
 		douyin.GET("/user/", api.UserInfo)
 
 		// publish apis

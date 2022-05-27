@@ -21,30 +21,8 @@ func RelationAction(c *gin.Context) {
 		return
 	}
 
-	// 获取参数token
-	token := c.Query("token")
-
-	// 未获取到token
-	if token == "" {
-		c.JSON(http.StatusOK, model.Response{
-			StatusCode: status.RequestParamError,
-			StatusMsg:  status.Msg(status.RequestParamError),
-		})
-		return
-	}
-
-	// 通过token获取id
-	id, err := userService.GetIdByToken(token)
-	if err != nil {
-		c.JSON(http.StatusOK, model.Response{
-			StatusCode: status.GetIdByTokenError,
-			StatusMsg:  status.Msg(status.GetIdByTokenError),
-		})
-		return
-	}
-
 	// 关注/取消关注
-	if ok := relationService.Action(id, param); ok {
+	if ok := relationService.Action(param); ok {
 		c.JSON(http.StatusOK, model.Response{
 			StatusCode: status.Success,
 			StatusMsg:  status.Msg(status.Success),
@@ -61,75 +39,29 @@ func RelationAction(c *gin.Context) {
 
 // FollowList 关注列表
 func FollowList(c *gin.Context) {
-	// 获取参数token
-	token := c.Query("token")
-
-	// 未获取到token
-	if token == "" {
-		c.JSON(http.StatusOK, model.UserInfoListResponse{
-			Response: model.Response{
-				StatusCode: status.RequestParamError,
-				StatusMsg:  status.Msg(status.RequestParamError),
-			},
-		})
-		return
-	}
-
-	// 通过token获取id
-	id, err := userService.GetIdByToken(token)
-	if err != nil {
-		c.JSON(http.StatusOK, model.UserInfoListResponse{
-			Response: model.Response{
-				StatusCode: status.GetIdByTokenError,
-				StatusMsg:  status.Msg(status.GetIdByTokenError),
-			},
-		})
-		return
-	}
+	// 获取参数user_id
+	userId := c.Query("user_id")
 
 	c.JSON(http.StatusOK, model.UserInfoListResponse{
 		Response: model.Response{
 			StatusCode: status.Success,
 			StatusMsg:  status.Msg(status.Success),
 		},
-		UserInfoList: relationService.FollowList(id),
+		UserInfoList: relationService.FollowList(userId),
 	})
 	return
 }
 
 // FollowerList 粉丝列表
 func FollowerList(c *gin.Context) {
-	// 获取参数token
-	token := c.Query("token")
-
-	// 未获取到token
-	if token == "" {
-		c.JSON(http.StatusOK, model.UserInfoListResponse{
-			Response: model.Response{
-				StatusCode: status.RequestParamError,
-				StatusMsg:  status.Msg(status.RequestParamError),
-			},
-		})
-		return
-	}
-
-	// 通过token获取id
-	id, err := userService.GetIdByToken(token)
-	if err != nil {
-		c.JSON(http.StatusOK, model.UserInfoListResponse{
-			Response: model.Response{
-				StatusCode: status.GetIdByTokenError,
-				StatusMsg:  status.Msg(status.GetIdByTokenError),
-			},
-		})
-		return
-	}
+	// 获取参数user_id
+	userId := c.Query("user_id")
 
 	c.JSON(http.StatusOK, model.UserInfoListResponse{
 		Response: model.Response{
 			StatusCode: status.Success,
 			StatusMsg:  status.Msg(status.Success),
 		},
-		UserInfoList: relationService.FollowerList(id),
+		UserInfoList: relationService.FollowerList(userId),
 	})
 }

@@ -11,7 +11,7 @@ import (
 
 type PublishService struct{}
 
-func (PublishService) SaveVideo(authorId uint64, playUrl string) int64 {
+func (PublishService) SaveVideo(authorId uint64, playUrl, title string) int64 {
 	// 获取服务器的对外ip
 	conn, err := net.Dial("udp", "8.8.8.8:53")
 	if err != nil {
@@ -26,10 +26,11 @@ func (PublishService) SaveVideo(authorId uint64, playUrl string) int64 {
 		// 封面直接设置为了默认封面
 		CoverUrl:   "https://cdn.pixabay.com/photo/2016/03/27/18/10/bear-1283347_1280.jpg",
 		CreateTime: time.Now().Unix(),
+		Title:      title,
 	}).RowsAffected
 }
 
-func (PublishService) List(id uint64) []model.VideoInfo {
+func (PublishService) List(id string) []model.VideoInfo {
 	var videos []model.Video
 	global.Db.Model(&model.Video{}).Where("author_id = ?", id).Find(&videos)
 	videoInfos := make([]model.VideoInfo, 0)
@@ -54,6 +55,7 @@ func (PublishService) List(id uint64) []model.VideoInfo {
 			FavoriteCount: video.FavoriteCount,
 			CommentCount:  video.CommentCount,
 			IsFavorite:    isFavoriteCount > 0,
+			Title:         video.Title,
 		})
 	}
 	return videoInfos

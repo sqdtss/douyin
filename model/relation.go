@@ -9,6 +9,7 @@ type Relation struct {
 
 // FollowParam 关注操作参数
 type FollowParam struct {
+	UserId     uint64 `form:"user_id" json:"user_id"`
 	ToUserId   uint64 `form:"to_user_id" json:"to_user_id"`
 	ActionType int    `form:"action_type" json:"action_type"`
 }

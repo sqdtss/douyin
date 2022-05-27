@@ -8,17 +8,17 @@ import (
 
 type FavoriteService struct{}
 
-func (FavoriteService) Action(userId uint64, param model.FavoriteActionParam) bool {
+func (FavoriteService) Action(param model.FavoriteActionParam) bool {
 	// 判断ActionType，为1则点赞，为2则取消点赞，其他情况return false
 	if param.ActionType == 1 {
 		// 如果已经在点赞表，return true
-		if err := global.Db.Where("user_id = ? and video_id = ?", userId, param.VideoId).First(&model.Favorite{}).Error; err == nil {
+		if err := global.Db.Where("user_id = ? and video_id = ?", param.UserId, param.VideoId).First(&model.Favorite{}).Error; err == nil {
 			return true
 		}
 
 		// 点赞
 		if err := global.Db.Transaction(func(tx *gorm.DB) error {
-			if err := tx.Create(&model.Favorite{UserId: userId, VideoId: param.VideoId}).Error; err != nil {
+			if err := tx.Create(&model.Favorite{UserId: param.UserId, VideoId: param.VideoId}).Error; err != nil {
 				return err
 			}
 			if err := tx.Model(&model.Video{}).Where("id = ?", param.VideoId).
@@ -33,7 +33,7 @@ func (FavoriteService) Action(userId uint64, param model.FavoriteActionParam) bo
 	} else if param.ActionType == 2 {
 		var favorite model.Favorite
 		// 如果已不再点赞表，return true
-		if err := global.Db.Where("user_id = ? and video_id = ?", userId, param.VideoId).First(&favorite).Error; err != nil {
+		if err := global.Db.Where("user_id = ? and video_id = ?", param.UserId, param.VideoId).First(&favorite).Error; err != nil {
 			return true
 		}
 
@@ -56,7 +56,7 @@ func (FavoriteService) Action(userId uint64, param model.FavoriteActionParam) bo
 	}
 }
 
-func (FavoriteService) List(userId uint64) []model.VideoInfo {
+func (FavoriteService) List(userId string) []model.VideoInfo {
 	var videoIds []uint64
 	global.Db.Model(&model.Favorite{}).Select("video_id").Where("user_id = ?", userId).Find(&videoIds)
 	videoInfos := make([]model.VideoInfo, 0)
@@ -86,6 +86,7 @@ func (FavoriteService) List(userId uint64) []model.VideoInfo {
 			FavoriteCount: video.FavoriteCount,
 			CommentCount:  video.CommentCount,
 			IsFavorite:    isFavoriteCount > 0,
+			Title:         video.Title,
 		})
 	}
 	return videoInfos

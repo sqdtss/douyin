@@ -52,10 +52,8 @@ func Feed(c *gin.Context) {
 	}
 
 	// 其他情况，返回UnknownError
-	c.JSON(http.StatusOK, model.FeedResponse{
-		Response: model.Response{
-			StatusCode: status.UnknownError,
-			StatusMsg:  status.Msg(status.UnknownError),
-		},
+	c.JSON(http.StatusOK, model.Response{
+		StatusCode: status.UnknownError,
+		StatusMsg:  status.Msg(status.UnknownError),
 	})
 }

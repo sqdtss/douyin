@@ -35,6 +35,7 @@ func (FeedService) Feed(userId uint64, latestTime int64) []model.VideoInfo {
 			FavoriteCount: video.FavoriteCount,
 			CommentCount:  video.CommentCount,
 			IsFavorite:    isFavoriteCount > 0,
+			Title:         video.Title,
 		})
 	}
 	return videoInfos

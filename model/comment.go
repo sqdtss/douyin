@@ -11,6 +11,7 @@ type Comment struct {
 
 // CommentActionParam 登录用户对视频评论操作传递的参数
 type CommentActionParam struct {
+	UserId      uint64 `form:"user_id" json:"user_id"`
 	VideoId     uint64 `form:"video_id" json:"video_id"`
 	ActionType  int    `form:"action_type" json:"action_type"`
 	CommentText string `form:"comment_text" json:"comment_text"`

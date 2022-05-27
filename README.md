@@ -23,3 +23,5 @@ go build
 
 ### 接口文档
 https://www.apifox.cn/apidoc/shared-8cc50618-0da6-4d5e-a398-76f3b8f766c5/api-18345145
+
+### 修改了很多地方，不过发现客户端仍未发送userId或者发送的userId始终为一（客户端巨大bug）

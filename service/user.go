@@ -79,7 +79,7 @@ func (UserService) Login(param model.RegisterAndLoginParam) (bool, uint64) {
 }
 
 // GetUserInfo 获取用户信息
-func (UserService) GetUserInfo(userId uint64) (userInfo model.UserInfo) {
+func (UserService) GetUserInfo(userId string) (userInfo model.UserInfo) {
 	global.Db.Model(&model.User{}).Where("id = ?", userId).First(&userInfo)
 	return
 }

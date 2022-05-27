@@ -9,12 +9,12 @@ import (
 
 type CommentService struct{}
 
-func (CommentService) Action(userId uint64, param model.CommentActionParam) bool {
+func (CommentService) Action(param model.CommentActionParam) bool {
 	if param.ActionType == 1 {
 		// 评论
 		if err := global.Db.Transaction(func(tx *gorm.DB) error {
 			if err := tx.Create(&model.Comment{
-				UserId:     userId,
+				UserId:     param.UserId,
 				VideoId:    param.VideoId,
 				Content:    param.CommentText,
 				CreateDate: time.Now().String(),
@@ -50,7 +50,7 @@ func (CommentService) Action(userId uint64, param model.CommentActionParam) bool
 	}
 }
 
-func (CommentService) List(userId uint64, videoId string) []model.CommentInfo {
+func (CommentService) List(videoId string) []model.CommentInfo {
 	var comments []model.Comment
 	global.Db.Model(&model.Comment{}).Where("video_id = ?", videoId).Find(&comments)
 	var commentInfos []model.CommentInfo
@@ -60,12 +60,7 @@ func (CommentService) List(userId uint64, videoId string) []model.CommentInfo {
 		// 通过userId查找视频user相关信息
 		global.Db.Model(&model.User{}).Where("id = ?", comment.UserId).First(&user)
 
-		var isFollowCount int64
-
-		// 查询是否已follow
-		global.Db.Model(&model.Relation{}).Where("user_id = ? and follower_id = ?", user.Id, userId).Count(&isFollowCount)
-		user.IsFollow = isFollowCount > 0
-
+		// 注意，此函数没有care这时作者有没有follow
 		commentInfos = append(commentInfos, model.CommentInfo{
 			Id:         comment.Id,
 			User:       user,

@@ -9,6 +9,7 @@ type Favorite struct {
 
 // FavoriteActionParam 登录用户对视频点赞和取消点赞操作传递的参数
 type FavoriteActionParam struct {
+	UserId     uint64 `form:"user_id" json:"user_id"`
 	VideoId    uint64 `form:"video_id" json:"video_id"`
 	ActionType int    `form:"action_type" json:"action_type"`
 }
